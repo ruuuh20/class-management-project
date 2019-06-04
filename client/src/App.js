@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Student from './components/Student';
@@ -25,7 +25,26 @@ const students = {
   'image': 'https://placeimg.com/64/64/any',
   'name': 'Joe'
 }
+
+const callApi = async () => {
+  const response = await fetch('/api/students');
+  const body = await response.json();
+  console.log(body)
+  return body;
+}
+
 const App = (props) => {
+
+  
+
+  const [students, setStudent] = useState("")
+  useEffect(() => {
+    callApi()
+    .then(res => setStudent( res ))
+    .catch(error => console.log(error))
+  }, [])
+
+
 
   const { classes } = props
   return (
@@ -42,7 +61,7 @@ const App = (props) => {
 
         </TableHead>
         <TableBody>
-          <Student id={students.id} image={students.image} name={students.name} />
+            {students ? students.map(s => { return <Student id={s.id} image={s.image} name={s.name} /> }) : ""}
 
         </TableBody>
       </Table>
