@@ -8,7 +8,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
-import { withStyles } from '@material-ui/core/styles'
+import { withStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress'
 
 const styles = theme => ({
   root: {
@@ -18,13 +19,16 @@ const styles = theme => ({
   }, 
   table: {
     minWidth: 1080
+  },
+  progress: {
+    margin: theme.spacing.unit * 2
   }
 })
-const students = {
-  'id': 1,
-  'image': 'https://placeimg.com/64/64/any',
-  'name': 'Joe'
-}
+// const students = {
+//   'id': 1,
+//   'image': 'https://placeimg.com/64/64/any',
+//   'name': 'Joe'
+// }
 
 const callApi = async () => {
   const response = await fetch('/api/students');
@@ -34,19 +38,22 @@ const callApi = async () => {
 }
 
 const App = (props) => {
+  const [students, setStudent] = useState("");
+  const [completed, setCompleted] = useState(0);
 
-  
-
-  const [students, setStudent] = useState("")
   useEffect(() => {
+    const timer = setInterval(progress, 20)
     callApi()
     .then(res => setStudent( res ))
     .catch(error => console.log(error))
   }, [])
 
 
-
   const { classes } = props
+
+  const progress = () => {
+    setCompleted( completed >= 100 ? 0 : completed + 1)
+  }
   return (
     <React.Fragment>
       <Paper className={styles({ spacing: { unit: 1 } }).root}>
@@ -56,12 +63,20 @@ const App = (props) => {
         <TableRow>
         <TableCell>ID</TableCell>
         <TableCell>Name</TableCell>
+        <TableCell>Grade</TableCell>
+        <TableCell>Gender</TableCell>
         <TableCell>Image</TableCell>
         </TableRow>
 
         </TableHead>
         <TableBody>
-            {students ? students.map(s => { return <Student id={s.id} image={s.image} name={s.name} /> }) : ""}
+            {students ? students.map(s => { return <Student key={s.id} id={s.id} image={s.image} name={s.name} gender={s.gender} grade={s.grade} /> }) : 
+          <TableRow>
+            <TableCell colspan="6" align="center">
+                  <CircularProgress className={styles({ spacing: { unit: 1 } }).progress}variant="determinate" value={completed}/>
+
+            </TableCell>
+          </TableRow>}
 
         </TableBody>
       </Table>
