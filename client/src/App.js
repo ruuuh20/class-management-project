@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Student from './components/Student';
+import NewStudent from './components/NewStudent';
 import Paper from '@material-ui/core/Paper'
 import Table from '@material-ui/core/Table'
 import TableHead from '@material-ui/core/TableHead';
@@ -48,6 +49,14 @@ const App = (props) => {
     .catch(error => console.log(error))
   }, [])
 
+  const stateRefresh = () => {
+    setStudent("")
+    setCompleted(0)
+    callApi()
+      .then(res => setStudent(res))
+      .catch(error => console.log(error))
+  }
+
 
   const { classes } = props
 
@@ -65,14 +74,14 @@ const App = (props) => {
         <TableCell>Name</TableCell>
         <TableCell>Grade</TableCell>
         <TableCell>Gender</TableCell>
-        <TableCell>Image</TableCell>
+       
         </TableRow>
 
         </TableHead>
         <TableBody>
-            {students ? students.map(s => { return <Student key={s.id} id={s.id} image={s.image} name={s.name} gender={s.gender} grade={s.grade} /> }) : 
+            {students ? students.map(s => { return <Student key={s.id} id={s.id} name={s.name} gender={s.gender} grade={s.grade} /> }) : 
           <TableRow>
-            <TableCell colspan="6" align="center">
+            <TableCell colSpan="6" align="center">
                   <CircularProgress className={styles({ spacing: { unit: 1 } }).progress}variant="determinate" value={completed}/>
 
             </TableCell>
@@ -81,6 +90,7 @@ const App = (props) => {
         </TableBody>
       </Table>
       </Paper>
+      <NewStudent stateRefresh={stateRefresh} />
     </React.Fragment>
   );
 }

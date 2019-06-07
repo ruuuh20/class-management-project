@@ -11,7 +11,7 @@ export default class Student extends Component {
                 <TableCell>{this.props.name}</TableCell>
                 <TableCell>{this.props.grade}</TableCell>
                 <TableCell>{this.props.gender}</TableCell>
-                <TableCell><img src={this.props.image} alt="profile img" /></TableCell>
+             
             </TableRow>
         )
     }
