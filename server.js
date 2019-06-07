@@ -35,7 +35,7 @@ app.get('/api/students', (req, res) => {
 // app.use('/image', express.static('./upload'));
 
 app.post('/api/students', upload.single('image'), (req, res) => {
-    let sql = 'INSERT INTO STUDENT VALUES (null, ?, ?, ?, now(), 0)';
+    let sql = 'INSERT INTO STUDENT VALUES (null, ?, ?, ?, 0, now())';
     // let image = '/image/' + req.file.filename;
     let name = req.body.name;
     let grade = req.body.grade;
