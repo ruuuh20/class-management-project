@@ -25,7 +25,7 @@ const upload = multer({dest: './upload'})
 
 app.get('/api/students', (req, res) => {
     connection.query(
-        "SELECT * FROM STUDENT",
+        "SELECT * FROM STUDENT WHERE isDeleted = 0",
         (err, rows, fields) => {
             res.send(rows)
         }
@@ -35,7 +35,7 @@ app.get('/api/students', (req, res) => {
 // app.use('/image', express.static('./upload'));
 
 app.post('/api/students', upload.single('image'), (req, res) => {
-    let sql = 'INSERT INTO STUDENT VALUES (null, ?, ?, ?)';
+    let sql = 'INSERT INTO STUDENT VALUES (null, ?, ?, ?, now(), 0)';
     // let image = '/image/' + req.file.filename;
     let name = req.body.name;
     let grade = req.body.grade;
@@ -48,6 +48,15 @@ app.post('/api/students', upload.single('image'), (req, res) => {
             console.log(err)
             console.log(rows)
 
+        })
+})
+
+app.delete('/api/students/:id', (req, res) => {
+    let sql = 'UPDATE STUDENT SET isDeleted = 1 WHERE id = ?';
+    let params = [req.params.id];
+    connection.query(sql, params,
+        (err, rows, fields) => {
+            res.send(rows)
         })
 })
 

@@ -74,12 +74,13 @@ const App = (props) => {
         <TableCell>Name</TableCell>
         <TableCell>Grade</TableCell>
         <TableCell>Gender</TableCell>
+        <TableCell>Edit</TableCell>
        
         </TableRow>
 
         </TableHead>
         <TableBody>
-            {students ? students.map(s => { return <Student key={s.id} id={s.id} name={s.name} gender={s.gender} grade={s.grade} /> }) : 
+            {students ? students.map(s => { return <Student stateRefresh={stateRefresh} key={s.id} id={s.id} name={s.name} gender={s.gender} grade={s.grade} /> }) : 
           <TableRow>
             <TableCell colSpan="6" align="center">
                   <CircularProgress className={styles({ spacing: { unit: 1 } }).progress}variant="determinate" value={completed}/>
